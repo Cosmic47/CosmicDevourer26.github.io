@@ -23,7 +23,7 @@ if (loadData() == null) {
 	var toUpgrInc = 4;
 	var upgVal = 2;
 	var incVal = 1;
-	var curDelay = 1000;
+	var tickspeed = 1000;
 	var autosave = false;
 }
 else {
@@ -33,7 +33,7 @@ else {
 	var toUpgrInc = data["toUpgrInc"];
 	var upgVal = data["upgVal"];
 	var incVal = data["incVal"];
-	var curDelay = data["curDelay"];
+	var tickspeed = data["tickspeed"];
 	var autosave = data["autosave"];
 }
 var tabs = ["main tab", "particle conversion", "options"];
@@ -59,20 +59,31 @@ function saveData() {
 		toUpgrInc: toUpgrInc,
 		upgVal: upgVal,
 		incVal: incVal,
-		curDelay: curDelay,
+		tickspeed: tickspeed,
 		autosave: autosave,
 	}
 	window.localStorage.setItem("saved data", JSON.stringify(save));
 }
 
+function hardReset(){
+	energy = 0;
+	toUpgrTick = 4;
+	toUpgrInc = 4;
+	upgVal = 2;
+	incVal = 1;
+	tickspeed = 1000;
+}
+
 var autosaveInterval = (autosave) ? setInterval(saveData, 1000):null;
 
 function incEnergy(){
-	energy += incVal;
+	energy += 0.01 * incVal * (1000 / tickspeed);
+	energy = Number.parseFloat(Number(energy).toFixed(5));
 	if (!isFinite(energy)){
-		quarks = 0;
+		energy = 0;
 	}
 }
+
 
 function changeTab(tabName){
 	tabs.forEach(tab => document.getElementById(tab).hidden = true)
@@ -81,7 +92,7 @@ function changeTab(tabName){
 
 function UpdateIncText(){
 	document.getElementById("increment value").innerHTML = "You get " + incVal + " eV/tick";
-	document.getElementById("tickspeed").innerHTML = "Tickspeed: " + 1 / (curDelay / 1000) + " times/sec";
+	document.getElementById("tickspeed").innerHTML = "Tickspeed: " + 1 / (tickspeed / 1000) + " times/sec";
 }
 
 function incUpgr(){
@@ -93,7 +104,7 @@ function incUpgr(){
 }
 
 function loop(){
-	document.getElementById("energy").innerHTML = "You have " + energy + " eV";
+	document.getElementById("energy").innerHTML = "You have " + Number.parseInt(energy) + " eV";
 	document.getElementById("upgInc").className = (energy >= toUpgrInc) ? "BetterButton green" : "BetterButton red";
 	document.getElementById("upgTick").className = (energy >= toUpgrTick) ? "BetterButton green" : "BetterButton red";
 	var upgTickName = (energy < toUpgrTick) ? "Get " + toUpgrTick + " eV to upgrade tickspeed":"Upgrade tickspeed";
@@ -112,14 +123,11 @@ function loop(){
 }
 
 setInterval(loop, 20)
-var inc_timer = new Timer(incEnergy, curDelay)
+var inc_timer = new Timer(incEnergy, 10)
 
 function tickUpgr(){
 	if (energy >= toUpgrTick){
-		var new_delay = inc_timer.delay - (inc_timer.delay * 0.11);
-		inc_timer.changeInterval(new_delay);
-		curDelay = new_delay;
-		energy -= toUpgrTick;
+		tickspeed -= tickspeed * 0.11;
 		toUpgrTick *= 4;
 	}
 }
