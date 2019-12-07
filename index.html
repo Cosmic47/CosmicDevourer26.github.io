@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+	<style>
+		.BetterButton {
+			background-color: black;
+			color: white;
+		}
+		.blue {
+			border-color: #0199FE;
+		}
+		.green {
+			border-color: #00DD00;
+		}
+		.red {
+			border-color: red;
+		}
+	</style>
+	<body style="background-color:black;color:white">
+		<script src = "main.js"></script>
+		<div id="tabs">
+			<button onclick="changeTab('main tab')", class="BetterButton blue">Main Tab</button>
+			<button onclick="changeTab('particle conversion')", class="BetterButton blue">Particle Conversions</button>
+			<button onclick="changeTab('options')", class="BetterButton blue">Options</button>
+		</div>
+		<div id="main tab">
+			<p id="energy">You have 0 eV/c^2</p>
+			<p id="increment value">You get 1 eV/c^2/tick</p>
+			<p id="tickspeed">Tickspeed: 1 time/sec</p>
+			<button onclick="incUpgr()", class="BetterButton red", id="upgInc"></button>
+			<button onclick="tickUpgr()", class="BetterButton red", id="upgTick"></button>
+		</div>
+		<div id="particle conversion", hidden=true>
+			<p>WIP</p>
+			<p>Known recipes:</p>
+			<p>Elementary particles:
+			<p>- 2,300,000 eV = down-quark</p>
+			<p>- 4,720,000 eV = up-quark</p>
+			<p>- 500,000 eV = electron</p>
+			<p></p>
+			<p>Complex particles:</p>
+			<p>- 2 up-quarks + 1 down-quark = proton</p>
+			<p>- 1 up-quark + 2 down-quarks = neutron</p>
+		</div>
+		<div id="options", hidden=true>
+			<p>Hi!</p>
+			<div>
+				<button id="save", class="BetterButton blue", onclick="saveData()">Save Data</button>
+				<button id="autosave", class="BetterButton green", onclick="ToggleAutoSave()">Enable autosave</button>
+			</div>
+			<div>
+				<button class="BetterButton red", style="width:201px">~=Hard reset=~</button>
+			</div>
+		</div>
+	</body>
+</html>
