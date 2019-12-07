@@ -128,6 +128,7 @@ var inc_timer = new Timer(incEnergy, 10)
 function tickUpgr(){
 	if (energy >= toUpgrTick){
 		tickspeed -= tickspeed * 0.11;
+		energy -= toUpgrTick;
 		toUpgrTick *= 4;
 	}
 }
