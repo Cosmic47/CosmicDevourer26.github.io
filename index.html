@@ -17,6 +17,9 @@
 		*:focus {
 			outline: none;
 		}
+		.tableLeft {
+			float: right
+		}
 	</style>
 	<body style="background-color:black;color:white">
 		<script src = "main.js"></script>
@@ -34,15 +37,55 @@
 		</div>
 		<div id="particle conversion", hidden=true>
 			<p>WIP</p>
-			<p>Known recipes:</p>
-			<p>Elementary particles:
-			<p>• 2,300,000 eV = down-quark</p>
-			<p>• 4,720,000 eV = up-quark</p>
-			<p>• 500,000 eV = electron</p>
-			<p></p>
-			<p>Complex particles:</p>
-			<p>• 2 up-quarks + 1 down-quark = proton</p>
-			<p>• 1 up-quark + 2 down-quarks = neutron</p>
+			<table>
+				<tr><td>Elementary particles:</td></tr>
+				<tr>
+					<td><p style="display:inline">• Down-quark</p></td>
+					<td><p style="display:inline", id="down_quarks">(0)</p></td>
+					<td><p style="display:inline">(Cost: 2,300,000 eV)</p></td>
+					<td>
+						<button class="BetterButton red", id="buy-one-down-quark", onclick="buyParticle('down_quarks', false)">Buy one</button>
+						<button class="BetterButton red", id="buy-max-down-quarks", onclick="buyParticle('down_quarks', true)">Buy max</button>
+					</td>
+				</tr>
+				<tr>
+					<td><p style="display:inline">• Up-quark</p></td>
+					<td><p style="display:inline", id="up_quarks">(0)</p></td>
+					<td><p style="display:inline">(Cost: 4,720,000 eV)</p></td>
+					<td>
+						<button class="BetterButton red", id="buy-one-up-quark", onclick="buyParticle('up_quarks', false)">Buy one</button>
+						<button class="BetterButton red", id="buy-max-up-quarks", onclick="buyParticle('up_quarks', true)">Buy max</button>
+					</td>
+				</tr>
+				<tr>
+					<td><p style="display:inline">• Electron</p></td>
+					<td><p style="display:inline", id="electrons">(0)</p></td>
+					<td><p style="display:inline">(Cost: 500,000 eV)</p></td>
+					<td>
+						<button class="BetterButton red", id="buy-one-electron", onclick="buyParticle('electrons', false)">Buy one</button>
+						<button class="BetterButton red", id="buy-max-electrons", onclick="buyParticle('electrons', true)">Buy max</button>
+					</td>
+				</tr>
+				<tr><td><br>Complex particles:</td></tr>
+				<tr>
+					<td><p style="display:inline">• Proton</p></td>
+					<td><p style="display:inline", id="protons">(0)</p></td>
+					<td><p style="display:inline">(Cost: 2 up-quarks + 1 down-quark)</p></td>
+					<td>
+						<button class="BetterButton red", id="buy-one-proton">Buy one</button>
+						<button class="BetterButton red", id="buy-max-proton">Buy max</button>
+					</td>
+				</tr>
+				<tr>
+					<td><p style="display:inline">• Neutron</p></td>
+					<td><p style="display:inline", id="neutrons">(0)</p></td>
+					<td><p style="display:inline">(Cost: 1 up-quark + 2 down-quarks)</p></td>
+					<td>
+						<button class="BetterButton red", id="buy-one-neutron">Buy one</button>
+						<button class="BetterButton red", id="buy-max-neutron">Buy max</button>
+					</td>
+				</tr>
+			</table>
 		</div>
 		<div id="options", hidden=true>
 			<p>Hi!</p>
