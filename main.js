@@ -1,9 +1,8 @@
 class Timer {
-	ontick(func){ func(); }
 	constructor(func, delay){
 		this.func = func;
 		this.delay = delay;
-		this.interval = setInterval(this.ontick, delay, this.func)
+		this.interval = setInterval(this.func, delay)
 	}
 	stop(){ clearInterval(this.interval); }
 	changeInterval(newInterval){
@@ -25,6 +24,13 @@ if (loadData() == null) {
 	var incVal = 1;
 	var tickspeed = 1000;
 	var autosave = false;
+	var resources = {
+		down_quarks: 0,
+		up_quarks: 0,
+		electrons: 0,
+		proton: 0,
+		neutron: 0,
+	}
 }
 else {
 	var data = loadData()
@@ -35,8 +41,36 @@ else {
 	var incVal = data["incVal"];
 	var tickspeed = data["tickspeed"];
 	var autosave = data["autosave"];
+	var resources = data["resources"];
 }
 var tabs = ["main tab", "particle conversion", "options"];
+var resource_one_buttons = {
+	"down_quarks": "buy-one-down-quark", 
+	"up_quarks": "buy-one-up-quark",
+	"electrons": "buy-one-electron"};
+var resource_max_buttons = {
+	"down_quarks": "buy-max-down-quarks", 
+	"up_quarks": "buy-max-up-quarks",
+	"electrons": "buy-max-electrons"};
+var resources_list = ["down_quarks", "up_quarks", "electrons"]
+var prices_for_elementary_particles = {
+	"down_quarks": 2300000, 
+	"up_quarks": 4720000, 
+	"electrons": 500000,}
+
+function buyParticle(particle_name, buyMax){
+	if (energy >= prices_for_elementary_particles[particle_name]){
+		if(!buyMax){
+			energy -= prices_for_elementary_particles[particle_name];
+			resources[particle_name] += 1;
+		}
+		else {
+			var bought = Math.floor(energy / prices_for_elementary_particles[particle_name]);
+			energy -= bought * prices_for_elementary_particles[particle_name];
+			resources[particle_name] += bought;
+		}
+	}
+}
 
 function ToggleAutoSave() {
 	var autosavebut = document.getElementById("autosave");
@@ -61,17 +95,14 @@ function saveData() {
 		incVal: incVal,
 		tickspeed: tickspeed,
 		autosave: autosave,
+		resources: resources,
 	}
 	window.localStorage.setItem("saved data", JSON.stringify(save));
 }
 
 function hardReset(){
-	energy = 0;
-	toUpgrTick = 4;
-	toUpgrInc = 4;
-	upgVal = 2;
-	incVal = 1;
-	tickspeed = 1000;
+	window.localStorage.clear();
+	window.location.reload();
 }
 
 var autosaveInterval = (autosave) ? setInterval(saveData, 1000):null;
@@ -83,7 +114,6 @@ function incEnergy(){
 		energy = 0;
 	}
 }
-
 
 function changeTab(tabName){
 	tabs.forEach(tab => document.getElementById(tab).hidden = true)
@@ -104,7 +134,7 @@ function incUpgr(){
 }
 
 function loop(){
-	document.getElementById("energy").innerHTML = "You have " + Number.parseInt(energy) + " eV";
+	document.getElementById("energy").innerHTML = "You have " + Math.floor(energy) + " eV";
 	document.getElementById("upgInc").className = (energy >= toUpgrInc) ? "BetterButton green" : "BetterButton red";
 	document.getElementById("upgTick").className = (energy >= toUpgrTick) ? "BetterButton green" : "BetterButton red";
 	var upgTickName = (energy < toUpgrTick) ? "Get " + toUpgrTick + " eV to upgrade tickspeed":"Upgrade tickspeed";
@@ -119,6 +149,18 @@ function loop(){
 	}
 	if ((autosave && document.getElementById("autosave").innerHTML == "Enable autosave") || (!autosave && document.getElementById("autosave").innerHTML == "Disable autosave")){
 		ToggleAutoSave();
+	}
+	for(var resource of resources_list){
+		document.getElementById(resource).innerHTML = "(" + resources[resource] + ")";
+		if(energy >= prices_for_elementary_particles[resource]){
+			
+			document.getElementById(resource_one_buttons[resource]).className = "BetterButton green";
+			document.getElementById(resource_max_buttons[resource]).className = "BetterButton green";
+		}
+		else {
+			document.getElementById(resource_one_buttons[resource]).className = "BetterButton red";
+			document.getElementById(resource_max_buttons[resource]).className = "BetterButton red";
+		}
 	}
 }
 
